@@ -1,4 +1,5 @@
-#Inroduction
+# Inroduction
+
 *Alistair Side Note: Everything looks like a function in this framework.*
 
 In this first tutorial you'll experience some of the basics of building a web UI with the Model-View-ViewModel (MVVM) pattern using knockout.js.
@@ -7,7 +8,7 @@ You'll learn how to define a UI's appearance using views and declarative binding
 
 Two main files being used in this tutorial the index.html file and the ViewModel:
 
-##Using Bindings in the view.
+## Using Bindings in the view.
 
 You can bind data from your View model to html by using the **text** properties in your **data-bind** attributes.
 
@@ -36,7 +37,7 @@ First Name: **Alistair**
 Last Name: **Mackay**
 ```
 
-##Making the data editable
+## Making the data editable
 You can make the data being displayed dynamic by using the **value** binding, aling with some regular HTML **<input>** controls, to make the data editable.
 
 you will also need to add **observables** to your Javascript model values.  These are properties that automatically issue notifications whenever their value changes.
@@ -58,7 +59,7 @@ function AppViewModel() {
 ```
 Whatever you type into the input sections will update the data-binded values.
 
-##Defining Computed Values
+## Defining Computed Values
 Often you'll want to combine/convert multiple observable values to make others.
 
 Knowck has a concept called **computed properties** - these are *observable* (i.e., they notify on change) and they are computed based on the values of other observables.
@@ -88,7 +89,7 @@ If you run the application now and edit the text boxes, you';; seee that all the
 **How it works**
 Things stay in sync because of automatic dependency tracking: the fullName html depends on fullName in the js which in turn depends on the firstName and lastName, which can be altered by editing one of those textboxes.
 
-#Updating the ViewModel
+# Updating the ViewModel
 You can add **click** event that update the model values, see the below example:
 
 **ViewModel.js**
