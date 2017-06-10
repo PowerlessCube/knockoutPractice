@@ -1,1 +1,3 @@
-"# knockoutPractice"    git init   git add README.md   git commit -m "first commit"   git remote add origin git@github.com:PowerlessCube/knockoutPractice.git   git push -u origin master 
+#knockoutJs Practice.
+
+Notes gathered while working through the tutorial on learn.knowckoutjs.com/#/?tutorial=intro.
