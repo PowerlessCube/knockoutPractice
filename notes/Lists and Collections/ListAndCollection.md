@@ -103,7 +103,7 @@ Try it - now when you click "Reserve another seat", the UI updates to match. Thi
 
 You can make what we have more dynamic by using **data-bindings** within the **foreach** block.
 
-The below code also shows how to handle <select> inputs in knockout.
+The below code also shows how to handle ```<select>``` inputs in knockout.
 
 **listAndCollection.html**
 ```
@@ -207,7 +207,7 @@ self.totalSurcharge = ko.computed(function() {
 ```
 Again, notice that since **seats** and **meal** are both observables, we're invoking them as functions to read their current values (e.g., **self.seats().length**).
 
-Display the total surcharge by adding the following <h3> element to the bottom of your view:
+Display the total surcharge by adding the following ```<h3>``` element to the bottom of your view:
 **listAndCollection.html**
 ```
 <!-- button and the rest of the stuff is located above this point-->
@@ -229,7 +229,7 @@ Now if you run the code, you'll see "total surcharge" appear and disappear as ap
 
 Having followed the MVVM pattern and got an object-oriented representation of the UI's data and behaviors, you're in a great position to sprinkle on extra behaviors in a very natural and convenient way.
 
-For example, if you're asked to display the total number of seats being reserved, you can implement that in just a single place, and you don't have to write any extra code to make the seat count update when you add or remove items. Just update the <h3> at the top of your view:
+For example, if you're asked to display the total number of seats being reserved, you can implement that in just a single place, and you don't have to write any extra code to make the seat count update when you add or remove items. Just update the ```<h3>``` at the top of your view:
 
 **listAndCollection.html**
 ```
