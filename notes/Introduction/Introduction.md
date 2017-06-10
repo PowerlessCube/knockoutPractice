@@ -13,13 +13,13 @@ Two main files being used in this tutorial the index.html file and the ViewModel
 You can bind data from your View model to html by using the **text** properties in your **data-bind** attributes.
 
 **index.html**
-```
+```html
 <p>First Name: <strong data-bind="text: firstName"></strong></p>
 <p>Last Name: <strong data-bind="text: lastName"></strong></p>
 ```
 
 **ViewModel.js**
-```
+```javascript
 //This is a simple *viewmodel* - JavaScript that defines the data and behaviour of your UI
 function AppViewModel() {
     this.firstName = "Alistair";
@@ -45,13 +45,13 @@ you will also need to add **observables** to your Javascript model values.  Thes
 See below Models
 
 **index.html**
-```
+```html
 <p>First Name: <input data-bind="value: firstName"/></p>
 <p>Last Name: <input data-bind="value: lastName"/></p>
 ```
 
 **ViewModel.js**
-```
+```javascript
 function AppViewModel() {
     this.firstName = ko.observable("Alistair");
     this.lastName = ko.observable("Mackay");
@@ -65,7 +65,7 @@ Often you'll want to combine/convert multiple observable values to make others.
 Knowck has a concept called **computed properties** - these are *observable* (i.e., they notify on change) and they are computed based on the values of other observables.
 
 **index.html**
-```
+```html
 <p>First Name: <strong data-bind="text: firstName"></strong></p>
 <p>Last Name: <strong data-bind="text: lastName"></strong></p>
 
@@ -76,7 +76,7 @@ Knowck has a concept called **computed properties** - these are *observable* (i.
 ```
 
 **ViewModel.js**
-```
+```javascript
 // firstname, last name are above this section.
     this.fullName = ko.computed(function() {
         return this.firstName() + " " + this.lastName();
@@ -93,7 +93,7 @@ Things stay in sync because of automatic dependency tracking: the fullName html 
 You can add **click** event that update the model values, see the below example:
 
 **ViewModel.js**
-```
+```javascript
 function AppViewModel() {
     // ... leave firstName, lastName, and fullName unchanged here...
 

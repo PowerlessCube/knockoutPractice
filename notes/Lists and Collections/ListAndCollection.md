@@ -14,7 +14,7 @@ Often you'll want to dynamically generate lists UI elements where the user can a
 Using the foreach binding as an attribute the **<tbody>** element to use the foreach, so that it will render a copy of its child elements for each entry in the seats array:
 
 **ListAndCollectionViewModel.js**
-```
+```javascript
 // Class to represent a row in the seat reservations grid
 function SeatReservation(name, initialMeal) {
     var self = this;
@@ -44,7 +44,7 @@ ko.applyBindings(new ReservationsViewModel());
 ```
 
 **listAndCollection.md**
-```
+```html
 <h2>Your seat reservations</h2>
 
 <table>
@@ -77,7 +77,7 @@ Following the MVVM pattern makes it very simple to work with changeable object g
 With that in mind we can update our view and add functionality to add a new seat reservation using **click** property.
 
 **ListAndCollectionViewModel.js**
-```
+```javascript
 function ReservationsViewModel() {
     // ... leave all the rest unchanged ...
 
@@ -88,8 +88,8 @@ function ReservationsViewModel() {
 }
 ```
 
-**ListAndCollection**
-```
+**ListAndCollection.html**
+```html
 <!-- Leave the rest unchanged -->
 <button data-bind="click: addSeat">Reserve another seat</button>
 ```
@@ -106,7 +106,7 @@ You can make what we have more dynamic by using **data-bindings** within the **f
 The below code also shows how to handle ```<select>``` inputs in knockout.
 
 **listAndCollection.html**
-```
+```html
 <h2>Your seat reservations</h2>
 
 <table>
@@ -136,7 +136,7 @@ This code uses two new bindings, **options** and **optionsText**, which together
 We've got a nice object-oriented representation of our data, so we can trivially add extra properties and functions anywhere in the object graph. Let's give the SeatReservation class the ability to format its own price data using some custom logic.
 
 **ListAndCollectionViewModel.js**
-```
+```javascript
 function SeatReservation(name, initialMeal) {
     // ...name and self.meal are up here...
 
@@ -148,7 +148,7 @@ function SeatReservation(name, initialMeal) {
 ```
 
 **listAndCollection.html**
-```
+```html
 <tbody data-bind="foreach: seats">
         <tr>
            <!-- name and meal options are above this-->
@@ -177,7 +177,7 @@ Update your view so that it displays a "remove" link next to each item:
 *Note* - **$root**. prefix causes Knockout to look for a **removeSeat** handler on your top-level viewmodel instead of on the **SeatReservation** instance being bound --- that's a more convenient place to put **removeSeat** in this example. So, add a corresponding **removeSeat** function to your root viewmodel class, **ReservationsViewModel**:
 
 **ListAndCollectionViewModel.js**
-```
+```javascript
 function ReservationsViewModel() {
     // ... leave the rest unchanged ...
 
@@ -197,7 +197,7 @@ It would be nice to let the customer know what they will be paying, right? Not s
 Add the following **ko.computed** property inside **ReservationsViewModel**:
 
 **ListAndCollectionViewModel.js**
-```
+```javascript
 self.totalSurcharge = ko.computed(function() {
    var total = 0;
    for (var i = 0; i < self.seats().length; i++)
@@ -209,7 +209,7 @@ Again, notice that since **seats** and **meal** are both observables, we're invo
 
 Display the total surcharge by adding the following ```<h3>``` element to the bottom of your view:
 **listAndCollection.html**
-```
+```html
 <!-- button and the rest of the stuff is located above this point-->
 <h3 data-bind="visible: totalSurcharge() > 0">
     total surcharge: £<span data-bind="text: totalSurcharge().toFixed(2)"></span>
@@ -232,7 +232,7 @@ Having followed the MVVM pattern and got an object-oriented representation of th
 For example, if you're asked to display the total number of seats being reserved, you can implement that in just a single place, and you don't have to write any extra code to make the seat count update when you add or remove items. Just update the ```<h3>``` at the top of your view:
 
 **listAndCollection.html**
-```
+```html
 <h3>Your seat reservations (<span data-bind="text: seats().length" ></span>)</h3>
 ```
 
@@ -240,8 +240,8 @@ Trivial.
 
 Similarly, if you're asked to put a limit on the number of seats you can reserve, say, you can make the UI represent that by using the enable binding:
 
-**ListAndCollectionViewModel.js**
-```
+**ListAndCollection.html**
+```html
 <button data-bind="click: addSeat, enable: seats().length < 5">Reserve another seat</button>
 ```
 
