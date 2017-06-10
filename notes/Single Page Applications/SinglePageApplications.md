@@ -29,7 +29,7 @@ You can use foreach to display the folders as a list. Add the following to your 
 </ul>
 ```
 
-If you run the application, you should have a bullet-pointed list. That's nice and semantic, but not very attractive! Improve the styling by adding the folders class to your <ul>:
+If you run the application, you should have a bullet-pointed list. That's nice and semantic, but not very attractive! Improve the styling by adding the folders class to your ```<ul>```:
 
 **Webmail.html**
 ```html
