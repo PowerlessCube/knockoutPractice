@@ -29,7 +29,7 @@ You can use foreach to display the folders as a list. Add the following to your 
 </ul>
 ```
 
-If you run the application, you should have a bullet-pointed list. That's nice and semantic, but not very attractive! Improve the styling by adding the folders class to your ```<ul>```:
+If you run the application, you should have a bullet-pointed list. That's nice and semantic, but not very attractive! Improve the styling by adding the folders class to your `<ul>`:
 
 **Webmail.html**
 ```html
@@ -142,7 +142,7 @@ function WebmailViewModel() {
 }
 ```
 
-Next you need to update your bindings, so that if the visitor clicks on a row in the mails grid, your viewmodel loads the corresponding mail. First use the **click** binding on the ```<tr>``` elements:
+Next you need to update your bindings, so that if the visitor clicks on a row in the mails grid, your viewmodel loads the corresponding mail. First use the **click** binding on the `<tr>` elements:
 
 **Webmail.html**
 ```html
@@ -186,3 +186,91 @@ Finally, you can display **chosenMailData** by adding a little more markup to yo
 ```
 
 Now if you click on a mail, you should see it appear on the screen. Notice the use of the **html** binding, which allows any linebreaks or HTML markup in the mail content to be displayed on-screen (we're making the server responsible for ensuring the mails are stripped of any malicious content).
+
+## Enabling Client-side Mavigation
+
+There are many open source libraries for doing client-side navigation (e.g., with URL hases or pushState). Any of them should fit nicely alongside Knockout. For this tutorial, we'll use **sammy.js** because it gives an easy way to define client-side URL patterns, as you'll see.
+
+The basic technique we'll use is adding an extra layer of indirection. Previously, the **goToFolder** and **goToMail** functions directly triggered Ajax requests and updated the viewmodel state. But now, we'll change **goToFolder** and **goToMail** so that they merely trigger client-side navigation. Separately, we'll use **Sammy** to detect client-side navigation and then do the Ajax requests and update the viewmodel state. This indirection means that if the user triggers client-side navigation by a different means (e.g., clicking back), the corresponding viewmodel updates will still occur.
+
+Start by adding a reference to sammy.js at the top of your view:
+
+**Webmail.html**
+```html
+<script src="/scripts/lib/sammy.js" type="text/javascript"></script>
+```
+
+Next, reduce your **goToFolder** and **goToMail** functions to the following, so that they merely trigger client-side navigation:
+
+**WebmailViewModel.js**
+```javascript
+// Behaviours
+self.goToFolder = function(folder) { location.hash = folder };
+self.goToMail = function(mail) { location.hash = mail.folder + '/' + mail.id };
+```
+
+Notice that we're using client-side URLs of the form ```#<foldername>``` and ```#<foldername>/<mailid>```. All we have to do now is use **Sammy** to catch navigation to these types of URLs, and invoke our previous logic for loading the corresponding data via an Ajax request. Configure **Sammy** as follows:
+
+**WebmailViewModel.js**
+```javascript
+function WebmailViewModel() {
+    // ... leave everything else unchanged ...   
+
+    // Client-side routes    
+    Sammy(function() {
+        this.get('#:folder', function() {
+            self.chosenFolderId(this.params.folder);
+            self.chosenMailData(null);
+            $.get("/mail", { folder: this.params.folder }, self.chosenFolderData);
+        });
+
+        this.get('#:folder/:mailId', function() {
+            self.chosenFolderId(this.params.folder);
+            self.chosenFolderData(null);
+            $.get("/mail", { mailId: this.params.mailId }, self.chosenMailData);
+        });
+    }).run();
+
+    // ... leave everything else unchanged ... 
+};
+```
+
+The first block matches URLs of the form `#<foldername>;` the second matches URLs of the form  `#<foldername>/<mailid>`. The logic inside is just the same as your previous **goToFolder** and **goToMail** functions — they use an Ajax request to update the viewmodel.
+
+Your view is already set up to display the results, so try it: you should now be able to navigate around and see the URL updating. If you're running Chrome, Firefox, or Safari, you'll also be able to use the browser's back and forwards buttons to retrace and replay your steps through the folders.
+
+## Supporting bookmarking / deep linking
+
+Your code almost supports bookmarking and deep linking already. The only thing wrong is that, when the page first loads, it forcibly redirects to the Inbox, regardless of the requested URL. Let's fix that.
+
+First, **remove** the lines that force redirection to the Inbox.
+
+**WebmailViewModel.js**
+```javascript
+// REMOVE the following two lines now:
+// Show inbox by default
+self.goToFolder('Inbox');
+```
+
+Instead, we'll make the Inbox appear by default *only if* the visitor has an empty client-side URL. Add to your Sammy routing configuration:
+
+**WebmailViewModel.js**
+```javascript
+// Client-side routes    
+Sammy(function() {
+    // ... leave the existing two routes unchanged ...
+
+    this.get('', function() { this.app.runRoute('get', '#Inbox') });
+}).run();
+```
+Using **runRoute** like this means that the empty client-side URL will be treated the same as **#Inbox**, i.e., it will load and display the Inbox.
+
+That does it! Now visitors can not only navigate around by clicking on folders and mails, they can also use their back/forward buttons and bookmark or share links just the same as if they were navigating through server-generated pages. And because the UI rendering is all client-side, only raw JSON data is being transmitted over the wire. This is dramatically more efficient than loading a complete new HTML page from the server after every click, leading to a much more engaging and native-like user experience.
+
+## Summary
+
+Knockout and the MVVM pattern fit naturally alongside libraries for working with client-side navigation. Whenever a client-side navigation occurs, you update your viewmodel, and the UI will correspondingly update automatically. This is cleaner, easier, and more robust than manually writing code to update many parts of your DOM every time navigation occurs.
+
+This example focused on client-side navigation, so it hardly made use of Knockout features at all. The data was read-only, and user interactivity was limited to navigation through static data, so we merely used Knockout as a kind of client-side HTML templating system. That, of course, is not the whole story: the real value is that you can also bring in richer Knockout features (such as **custom bindings**, or **editable collections**) and they will work exactly the same within client-side navigation as without it. This kind of architectural clarity and flexibility enables you to scale up to handle real-world complexity without your code becoming unclear or impractical.
+
+In case you want to see the webmail example running full-screen (and outside an `<iframe>`), [here's a standalone finished copy](http://learn.knockoutjs.com/WebmailExampleStandalone.html).
