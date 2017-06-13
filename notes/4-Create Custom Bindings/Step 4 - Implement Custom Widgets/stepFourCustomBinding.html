@@ -6,7 +6,7 @@
     <tbody data-bind="foreach: answers">
         <tr>
             <td data-bind="text: answerText"></td>
-            <td><select data-bind="options: [1,2,3,4,5], value: points"></select></td>
+            <td data-bind="starRating: points"></td>
         </tr>    
     </tbody>
 </table>

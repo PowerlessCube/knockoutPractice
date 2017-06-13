@@ -46,7 +46,7 @@ Since the initial point allocations are all 1, you should get one star highlight
 
 ## Highlighting as the mouse hovers
 
-As the visitor mouses over the stars, it's nice to highlight the ones they're about to select. The "highlight" state doesn't really need to be linked to the viewmodel as you're not storing that data in any way, so the easiest option is to control highlighting with some raw jQuery code.
+As the visitor mouses over the stars, it's nice to highlight the ones they're about to select. The *"highlight"* state doesn't really need to be linked to the viewmodel as you're not storing that data in any way, so the easiest option is to control highlighting with some raw jQuery code.
 
 You can use jQuery's hover function to catch hover-in and hover-out events, setting suitable CSS classes on the affected stars:
 
@@ -67,10 +67,12 @@ init: function(element, valueAccessor) {
 
 Now as you move the mouse, you'll see the stars light up.
 
-Writing data back to the viewmodel
+## Writing data back to the viewmodel
 
 When the visitor clicks on a star, you'll want to store their updated rating in the underlying viewmodel, so the rest of the UI can update automatically. This is pretty easy to do: use jQuery's click function to catch those clicks:
 
+**CustomBindings.js**
+```javascript
 // Handle mouse events on the stars
 $("span", element).each(function(index) {
     $(this).hover(
@@ -81,9 +83,11 @@ $("span", element).each(function(index) {
        observable(index+1);               // Write the new rating to it
      }); 
 });
+```
+
 Try it - your star rating system should now be fully functional! The UI now all updates in sync with the visitor's ratings.
 
-Summary
+## Summary
 
 The starRating binding is about as complicated as bindings usually get. It illustrates how bindings are often the place where your code drops below the nicely declarative, object-oriented MVVM layer and into the more raw, low-level DOM manipulation layer to make the necessary UI updates. Whether or not this is comfortable and easy for you depends on your skills with jQuery or any other DOM library...
 
